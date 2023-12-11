@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch, connect} from 'react-redux'
 import Gallery from './Gallery';
 import ButtonBar from './ButtonBar';
 
@@ -37,4 +38,5 @@ function App() {
   );
 }
 
-export default App;
+export default connect(mapStateToProps)(App)
+
