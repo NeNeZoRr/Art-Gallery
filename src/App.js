@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Gallery from './Gallery';
 import ButtonBar from './ButtonBar';
-import { fetchData } from './actions'; // Adjust the path based on your project structure
+import { fetchData } from './features/dataSlice'
 
 const App = () => {
   const dispatch = useDispatch();
@@ -12,7 +12,7 @@ const App = () => {
 
   useEffect(() => {
     document.title = 'Welcome to ArtWorld';
-    dispatch(fetchData(objectId)); // Pass objectId to your fetchData action
+    dispatch(fetchData(objectId));
   }, [objectId, dispatch]);
 
   const handleIterate = (e) => {
