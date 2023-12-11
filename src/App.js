@@ -1,52 +1,47 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Gallery from './Gallery';
-import ButtonBar from './ButtonBar';
-import { fetchData, setData } from './features/dataSlice'; 
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { clearData, incrementId, decrementId, inputId, fetchData, fetchRandomData } from './features/dataSlice';
 
-const App = () => {
+function App() {
   const dispatch = useDispatch();
-  const objectId = useSelector(state => state.data.objectId);
-  const [data, setDataState] = useState({});
-  const [artId, setArtId] = useState(12770);
+  const data = useSelector((state) => state.data);
+
+  const renderImg = () => {
+    if (data.apiData) {
+      return <img style={{ width: '100%', maxWidth: '100vw', height: 'auto' }} src={data.apiData.primaryImage} alt={data.apiData.title} />;
+    } else {
+      return <p>image here</p>;
+    }
+  };
 
   useEffect(() => {
-    document.title = 'Welcome to ArtWorld';
-
-    const fetchAndSetData = async () => {
-      try {
-        const response = await dispatch(fetchData(objectId));
-        dispatch(setData(response.payload));
-      } catch (error) {
-        console.error('Error fetching and setting data:', error);
-      }
-    };
-
-    fetchAndSetData();
-  }, [objectId, dispatch]);
-
-  const handleIterate = (e) => {
-    setArtId(artId + Number(e.target.value));
-  };
-
-  const displayImage = () => {
-    if (!data.primaryImage) {
-      return <h2>No Image!</h2>;
-    }
-    return <Gallery objectImg={data.primaryImage} title={data.title} />;
-  };
+    dispatch(fetchData());
+  }, [data.objectId, dispatch]);
 
   return (
-    <div className="App" style={{ textAlign: 'center' }}>
-      <div style={{ marginTop: '50px' }}>
-        <h1>{data.title}</h1>
+    <div style={{ textAlign: 'center', margin: '20px 0' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div>
+          <button onClick={() => dispatch(fetchRandomData())}>Random!</button>
+          <button onClick={() => dispatch(clearData())}>Clear</button>
+          <button onClick={() => dispatch(incrementId())}>Next</button>
+          <button onClick={() => dispatch(decrementId())}>Back</button>
+        </div>
+        <input
+          value={data.objectId}
+          onChange={(e) => {
+            dispatch(inputId(Number(e.target.value)));
+          }}
+          placeholder="Search by ID"
+          style={{ marginLeft: '10px' }}
+        />
       </div>
-      <div style={{ width: '100%' }}>
-        {displayImage()}
+      <div style={{ fontSize: '1.5em', fontWeight: 'bold' }}>
+        {data.objectId}
+        {renderImg()}
       </div>
-      <ButtonBar handleIterate={handleIterate} />
     </div>
   );
-};
+}
 
 export default App;
