@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch, connect} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
 import Gallery from './Gallery';
 import ButtonBar from './ButtonBar';
+import { fetchData } from './actions'; // Adjust the path based on your project structure
 
-function App() {
-  let [data, setData] = useState({});
-  let [artId, setArtId] = useState(12770);
+const App = () => {
+  const dispatch = useDispatch();
+  const objectId = useSelector(state => state.data.objectId);
+  const [data, setData] = useState({});
+  const [artId, setArtId] = useState(12770);
 
   useEffect(() => {
     document.title = 'Welcome to ArtWorld';
-    fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${artId}`)
-      .then(response => response.json())
-      .then(resdata => setData(resdata));
-  }, [artId]);
+    dispatch(fetchData(objectId)); // Pass objectId to your fetchData action
+  }, [objectId, dispatch]);
 
   const handleIterate = (e) => {
     setArtId(artId + Number(e.target.value));
@@ -36,7 +37,6 @@ function App() {
       <ButtonBar handleIterate={handleIterate} />
     </div>
   );
-}
+};
 
-export default connect(mapStateToProps)(App)
-
+export default App;
