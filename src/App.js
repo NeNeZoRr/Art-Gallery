@@ -2,17 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Gallery from './Gallery';
 import ButtonBar from './ButtonBar';
-import { fetchData } from './features/dataSlice'
+import { fetchData, setData } from './features/dataSlice'; 
 
 const App = () => {
   const dispatch = useDispatch();
   const objectId = useSelector(state => state.data.objectId);
-  const [data, setData] = useState({});
+  const [data, setDataState] = useState({});
   const [artId, setArtId] = useState(12770);
 
   useEffect(() => {
     document.title = 'Welcome to ArtWorld';
-    dispatch(fetchData(objectId));
+
+    const fetchAndSetData = async () => {
+      try {
+        const response = await dispatch(fetchData(objectId));
+        dispatch(setData(response.payload));
+      } catch (error) {
+        console.error('Error fetching and setting data:', error);
+      }
+    };
+
+    fetchAndSetData();
   }, [objectId, dispatch]);
 
   const handleIterate = (e) => {
