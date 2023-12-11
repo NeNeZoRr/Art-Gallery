@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { clearData, incrementId, decrementId, inputId, fetchData, fetchRandomData } from './features/dataSlice';
+import { clearData, fetchData, incrementId, decrementId, inputId } from './features/dataSlice';
 
 function App() {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ function App() {
     <div style={{ textAlign: 'center', margin: '20px 0' }}>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <div>
-          <button onClick={() => dispatch(fetchRandomData())}>Random!</button>
+          <button onClick={() => dispatch(fetchData())}>Thunk!</button>
           <button onClick={() => dispatch(clearData())}>Clear</button>
           <button onClick={() => dispatch(incrementId())}>Next</button>
           <button onClick={() => dispatch(decrementId())}>Back</button>
